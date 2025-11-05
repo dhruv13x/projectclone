@@ -1,71 +1,87 @@
 # projectclone 🧬  
-### Exact, reproducible, full-state project snapshots — with git, caches, env artifacts & symlinks
+### Exact, reproducible, full-state project snapshots — including git, caches, env artifacts & symlinks
 
 [![PyPI](https://img.shields.io/pypi/v/projectclone.svg)](https://pypi.org/project/projectclone/)
 [![Python](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Build](https://img.shields.io/github/actions/workflow/status/dhruv13x/projectclone/publish.yml)](https://github.com/dhruv13x/projectclone/actions)
 [![Downloads](https://img.shields.io/pypi/dm/projectclone.svg)](https://pypi.org/project/projectclone/)
-[![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20Android%20(Termux)-orange.svg)]()
+![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20Android%20(Termux)-orange.svg)
 
 ---
 
 ## 🚀 Overview
 
-`projectclone` creates **exact, faithful, self-contained copies** of your project workspace —  
-including:
+`projectclone` creates **exact, faithful, self-contained snapshots** of your project directory, including:
 
 ✔ Source code  
 ✔ `.git` repo & history  
-✔ Virtualenvs & caches (unless excluded)  
-✔ Symlinks, metadata, file times  
-✔ Logs, config, db files, secrets *(your machine-level security applies)*
+✔ Virtualenvs & caches *(unless excluded)*  
+✔ File timestamps, metadata, symlinks  
+✔ Configs, logs, local DBs  
+✔ Environment-specific state
+
+This enables **true reproducibility** and **safe rollback points** across environments and devices.
 
 ### Why this tool?
 
-For developers who need **guaranteed reproducible project states**, across:
+For developers who need **guaranteed restorable project states**, across:
 
-- major refactors
-- release checkpoints
-- deployment backups
-- research experiments
-- CI/CD artifact preservation
-- Termux / mobile dev environments
-- Secure environment rollbacks
-- Code forensics / disaster recovery
+- Major refactors
+- Release checkpoints
+- Deployment backups
+- Research environments
+- Offline disaster recovery
+- CI/CD artifact capture
+- Termux/mobile development
+- Reproducible experiments
 
-> Think of it as:  
-> **`git commit` + `rsync --link-dest` + `tar` + secure state freezer**  
-> in one reliable command.
+> Think:  
+> `git commit` + `tar` + `rsync --link-dest` + atomic backup discipline  
+> — in one tool.
 
 ---
 
-## ✨ Key Features
+## 🔗 Restore tool
+
+For restoring projectclone backups, use its companion tool:
+
+### 👉 [`projectrestore`](https://github.com/dhruv13x/projectrestore)
+
+| Tool | Responsibility |
+|---|---|
+`projectclone` | **Create** state snapshots *(non-destructive)*
+`projectrestore` | **Apply** snapshots safely *(atomic & secure)*
+
+This design keeps the backup tool safe, focused, and non-destructive — while giving the restore tool full security hardening and atomic restore semantics.
+
+---
+
+## ✨ Features
 
 | Feature | Description |
 |---|---|
-Full directory clone | Copies every file (or hard-linked incremental mode)  
-Archive mode | `.tar.gz` compressed snapshot with optional SHA256 manifest  
-Incremental mode | `rsync --link-dest` deduplication like Time Machine / Borg  
-Safety-first design | Atomic ops, temp dirs, cleanup on failure, UID bit stripping  
-Manifest options | Size manifest + per-file SHA256 manifest for integrity  
-Cross-device aware | Safely moves temp artifacts across filesystems  
-Smart excludes | Glob/substring excludes (optional)  
-Dry-run mode | Estimate + preview changes  
-Rotation | Keep N most recent backups  
-Progress indicators | Real-time file copy count + sizes  
-Termux optimized | Works seamlessly in Termux + proot Ubuntu  
+Full directory clone | Exact deep copy with metadata  
+Archive mode | `.tar.gz` with optional SHA-256 manifest  
+Incremental mode | Hard-link dedup snapshots (like Time Machine / Borg)  
+Atomic safety | Temp staging → atomic move → rollback on fail  
+Cross-filesystem safe | Intelligent move vs copy fallback  
+Dry-run mode | Preview without modifying anything  
+Rotation | Keep only the last N snapshots  
+Exclude filters | Glob / substring file exclusion  
+Progress UI | Live counters and size reporting  
+Termux ready | Works on Android + proot Ubuntu
 
 ---
 
 ## 📦 Installation
 
-### Standard install
+### 🐍 Standard install
 
 ```sh
 pip install projectclone
 
-Termux / Android
+📱 Termux / Android
 
 pkg install rsync proot-distro
 pip install projectclone
@@ -73,9 +89,9 @@ pip install projectclone
 
 ---
 
-🔧 Usage
+🔧 Usage Examples
 
-Basic backup to default location
+Basic backup
 
 projectclone backup_1k_tests
 
@@ -86,11 +102,11 @@ Creates:
 
 ---
 
-Archive backup (compressed)
+Archive mode
 
 projectclone release_v1 --archive
 
-Outputs:
+Produces:
 
 release_v1.tar.gz
 release_v1.tar.gz.sha256
@@ -98,30 +114,30 @@ release_v1.tar.gz.sha256
 
 ---
 
-Incremental (fast snapshots, dedup)
+Incremental backup (deduplicated snapshots)
 
 projectclone checkpoint --incremental
 
 
 ---
 
-Show what will happen (safe preview)
-
-projectclone rc --dry-run
-
-
----
-
-Excluding files
+Exclude files
 
 projectclone nightly --exclude __pycache__ --exclude .mypy_cache
 
 
 ---
 
-Keep last 5 clones (rotation)
+Retain last 5 backups
 
 projectclone stable --keep 5
+
+
+---
+
+Dry-run safety preview
+
+projectclone test --dry-run
 
 
 ---
@@ -133,55 +149,56 @@ projectclone --help
 
 ---
 
-🛠 Options
+🛠 Options Summary
 
 Flag	Meaning
 
---archive	Create .tar.gz snapshot
---incremental	Rsync incremental mode with hardlinks
---manifest	Create size manifest
---manifest-sha	Per-file SHA256 manifest (slow)
---exclude PATTERN	Exclude matching paths
---dest DIR	Override destination directory
---dry-run	No writes — preview only
---symlinks	Preserve symbolic links
---yes	Skip confirmation prompt
---keep N	Keep only N recent snapshots
---verbose	Verbose logs
---progress-interval N	Print progress every N files
+--archive	Create .tar.gz archive
+--incremental	Hard-linked incremental mode
+--manifest	Size manifest
+--manifest-sha	Per-file SHA-256 manifest
+--exclude	Exclude patterns
+--dest DIR	Custom destination
+--dry-run	Preview, no writes
+--symlinks	Preserve symlinks
+--keep N	Keep only last N backups
+--yes	Auto-confirm operations
+--verbose	Debug logging
 
 
 
 ---
 
-🔐 Safety & Guarantees
+🔐 Safety Guarantees
 
-Atomic writes (temp → atomic move)
+Atomic staging → atomic final move
 
-Auto-cleanup temp dirs on interrupt
+Secure cleanup on failure
 
-Cross-filesystem safe move logic
+Cross-device move fallback
 
-Clears setuid/setgid bits for security
+Drops setuid/setgid bits
 
-Write-protected log file (chmod 600 when supported)
+Tight log permissions (chmod 600 where supported)
+
+Non-destructive: never overwrites directories
 
 
 
 ---
 
-📁 Default Backup Location
+📁 Default Paths
 
-Platform	Path
+Platform	Location
 
-Linux	~/project_backups (or provided)
+Linux	~/project_backups
 Termux	/sdcard/project_backups
 
 
 
 ---
 
-🧪 Testing
+🧪 Development
 
 pip install -e .[dev]
 pytest -v
@@ -191,33 +208,30 @@ pytest -v
 
 📜 License
 
-MIT — free for personal & commercial use.
+MIT — open source & production-friendly.
 
 
 ---
 
 🤝 Contributing
 
-PRs welcome — especially for:
+Ideas & PRs welcome — especially around:
 
-Restore module
+Compression tuning (zstd / lz4)
 
-Remote sync targets (S3, GDrive, SSH)
+Remote sync (SSH / S3 / GDrive)
 
-Fuse mounts / streaming restore
+Fuse mounts / stream extraction
 
-Compression tuning (lz4, zstd)
-
-pydantic backed config file
+Config file support
 
 
 
 ---
 
-⭐ Support / Motivation
+⭐ Support
 
-Star the repo to support development 🙏
-Every ⭐ helps justify more time invested.
+If this tool protects your work, please ⭐️ the repo — your support drives development.
 
 git clone https://github.com/dhruv13x/projectclone
 
@@ -234,17 +248,20 @@ Mobile-first DevOps explorer | Rust & Python | Cloud | Termux power-user
 
 🧩 Roadmap
 
-projectclone restore
+.projectcloneignore
 
-zstd / lz4 compression modes
+zstd / lz4 compression
 
-remote backup: s3 / ssh / gdrive
+Remote targets (SSH / S3 / GDrive)
 
-.projectcloneignore support
+Encrypted archives
 
-encrypted archives
+GUI wrapper (Android & Desktop)
 
-GUI wrapper (Android / desktop)
+
+> Restore is intentionally delegated to
+projectrestore → secure, atomic, rollback-safe recovery
+
 
 
 
@@ -253,11 +270,13 @@ GUI wrapper (Android / desktop)
 💬 Final Word
 
 > Code evolves — backups must keep up.
+Restore safely — with tools designed for it.
 
 
 
-With projectclone, every project state becomes reproducible forever.
+With projectclone, every project state becomes portable, reproducible, and future-proof.
 
-Freeze. Trust. Restore. Repeat.
+Clone. Freeze. Protect. Restore via projectrestore.
+
 
 ---

@@ -1,0 +1,50 @@
+name: Publish to PyPI
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'  # Example: v0.1.0
+
+permissions:
+  contents: read
+  id-token: write  # For PyPI trusted publishing (OIDC)
+
+jobs:
+  build-publish:
+    name: Build & Publish projectclone
+    runs-on: ubuntu-latest
+    environment: pypi  # Must match GitHub env name (if used)
+
+    steps:
+      - name: 🧩 Checkout source
+        uses: actions/checkout@v4
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: ⚙️ Install build dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install build twine
+
+      - name: 🏗️ Build package
+        run: python -m build
+
+      - name: 🔍 Verify package metadata
+        run: twine check dist/*
+
+      - name: 🧠 Cache pip deps
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/pyproject.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: 🚀 Publish to PyPI via OIDC
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          verbose: true
+          skip-existing: true

@@ -1,0 +1,2 @@
+[console_scripts]
+projectclone = projectclone.cli:main

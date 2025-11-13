@@ -76,7 +76,6 @@ ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 pythonpath = "src"
-timeout = 10
 testpaths = ["tests"]
 addopts = [
   "-ra",

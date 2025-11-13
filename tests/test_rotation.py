@@ -18,12 +18,12 @@ def temp_dest(tmp_path: Path):
 class TestRotation:
     def test_rotate_backups(self, temp_dest):
         project = "testproj"
-        ts1 = f"{time.strftime('%Y-%m-%d_%H%M%S', time.gmtime(time.time() - 60))}-testproj-note1"
-        ts2 = f"{time.strftime('%Y-%m-%d_%H%M%S')}-testproj-note2"
-        dir1 = temp_dest / ts1
+        dir1 = temp_dest / "2025-01-01_000000-testproj-note1"
         dir1.mkdir()
-        file2 = temp_dest / f"{ts2}.tar.gz"
+        os.utime(dir1, (1735689600, 1735689600))  # Jan 1, 2025
+        file2 = temp_dest / "2025-01-02_000000-testproj-note2.tar.gz"
         file2.touch()
+        os.utime(file2, (1735776000, 1735776000)) # Jan 2, 2025
         # Keep 1: delete older
         rotate_backups(temp_dest, 1, project)
         assert not dir1.exists()

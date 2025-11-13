@@ -1,6 +1,12 @@
+import signal
+from unittest.mock import patch
+
+import pytest
+
 from projectclone.cleanup import (
     CleanupState,
     cleanup_state,
+    _signal_handler,
 )
 
 
@@ -35,3 +41,21 @@ class TestCleanupState:
         cleanup_state.cleanup(verbose=False)
         assert not f.exists()
         assert not d.exists()
+
+    @patch("sys.exit")
+    def test_signal_handler(self, mock_exit):
+        _signal_handler(signal.SIGINT, None)
+        mock_exit.assert_called_once_with(2)
+
+    def test_cleanup_error_handling(self, tmp_path):
+        state = CleanupState()
+        tmp_d = tmp_path / "tmpd"
+        tmp_d.mkdir()
+        state.register_tmp_dir(tmp_d)
+
+        # Mock shutil.rmtree to raise an exception
+        with patch("shutil.rmtree") as mock_rmtree:
+            mock_rmtree.side_effect = OSError("Test error")
+            state.cleanup()
+            # The directory should still be there, and the error should be caught
+            assert tmp_d.exists()

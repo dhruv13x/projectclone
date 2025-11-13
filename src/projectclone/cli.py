@@ -69,7 +69,11 @@ def main():
     ts = timestamp()
     dest_name = f"{ts}-{foldername}-{short_note}"
     dest_base = Path(args.dest).expanduser()
-    ensure_dir(dest_base)
+    try:
+        ensure_dir(dest_base)
+    except Exception as e:
+        print(f"ERROR: Could not create destination directory {dest_base}: {e}")
+        sys.exit(2)
 
     # create per-run log file and set restrictive permissions where possible
     per_log = dest_base / f"backup_{ts}_{foldername}.log"

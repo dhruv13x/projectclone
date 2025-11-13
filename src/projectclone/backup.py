@@ -44,16 +44,16 @@ def create_archive(
     else:
         final_temp = dest_temp_file.with_suffix(".tar.gz")
 
-    if log_fp:
-        try:
-            log_fp.write(f"Creating archive at temp {final_temp}\n")
-        except Exception:
-            pass
     ensure_dir(final_temp.parent)
 
     top_level = arcname or src.name
 
     try:
+        if log_fp:
+            try:
+                log_fp.write(f"Creating archive at temp {final_temp}\n")
+            except Exception:
+                pass
         # Use PAX format for better compatibility.
         # Pass dereference to tarfile.open (control whether symlinks are followed).
         with tarfile.open(final_temp, "w:gz", format=tarfile.PAX_FORMAT, dereference=not preserve_symlinks) as tar:

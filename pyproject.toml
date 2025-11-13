@@ -74,8 +74,16 @@ target-version = ['py311']
 python_version = "3.11"
 ignore_missing_imports = true
 
+
 [tool.pytest.ini_options]
 pythonpath = "src"
 testpaths = ["tests"]
+addopts = [
+    "-q",                  # Run in quiet mode
+    "--strict-markers",    # Be strict about pytest markers
+    "--cov=src/projectclone",  # Measure coverage on the src package
+    "--cov-report=term-missing", # Show missing lines in terminal
+    "--cov-fail-under=90",   # Fail build if coverage < 85%
+]
 log_cli = true
 log_cli_level = "INFO"

@@ -1,6 +1,7 @@
 import os
 import time
 from pathlib import Path
+from unittest.mock import patch
 
 import pytest
 
@@ -60,3 +61,19 @@ class TestRotation:
         rotate_backups(base, keep=1, project_name="proj")
         remaining = list(base.iterdir())
         assert len(remaining) == 1
+
+    def test_rotate_backups_error_handling(self, temp_dest):
+        project = "testproj"
+        dir1 = temp_dest / "2025-01-01_000000-testproj-note1"
+        dir1.mkdir()
+        os.utime(dir1, (1735689600, 1735689600))  # Jan 1, 2025
+        file2 = temp_dest / "2025-01-02_000000-testproj-note2.tar.gz"
+        file2.touch()
+        os.utime(file2, (1735776000, 1735776000))  # Jan 2, 2025
+
+        # Mock shutil.rmtree to raise an exception
+        with patch("shutil.rmtree") as mock_rmtree:
+            mock_rmtree.side_effect = OSError("Test error")
+            rotate_backups(temp_dest, 1, project)
+            # The file should still be there, and the error should be caught
+            assert dir1.exists()

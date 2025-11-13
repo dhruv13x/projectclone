@@ -57,6 +57,9 @@ def parse_args():
     p.add_argument("--dry-run", action="store_true", help="only estimate and show actions, do not write (for incremental allow rsync dry-run)")
     p.add_argument("--incremental", action="store_true", help="use rsync incremental (requires rsync)")
     p.add_argument("--verbose", action="store_true", help="verbose logging")
+    p.add_argument(
+        "--version", action="version", version=f"%(prog)s 1.0.0", help="Show program's version number and exit"
+    )
     return p.parse_args()
 
 

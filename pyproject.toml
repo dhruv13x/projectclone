@@ -2,12 +2,11 @@
 requires = ["setuptools>=68.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools.dynamic]
-version = {attr = "projectclone.__version__"}
+
 
 [project]
 name = "projectclone"
-dynamic = ["version"]
+version = "1.0.0"
 description = "Create exact, self-contained, reproducible project snapshots including git, caches, configs, and environment artifacts."
 readme = "README.md"
 requires-python = ">=3.8"

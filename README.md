@@ -1,12 +1,39 @@
+<div align="center">
+  <img src="https://raw.githubusercontent.com/dhruv13x/projectclone/main/projectclone_logo.png" alt="projectclone logo" width="200"/>
+</div>
+
+<div align="center">
+
+<!-- Package Info -->
+[![PyPI version](https://img.shields.io/pypi/v/projectclone.svg)](https://pypi.org/project/projectclone/)
+[![Python](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/)
+![Wheel](https://img.shields.io/pypi/wheel/projectclone.svg)
+[![Release](https://img.shields.io/badge/release-PyPI-blue)](https://pypi.org/project/projectclone/)
+
+<!-- Build & Quality -->
+[![Build status](https://github.com/dhruv13x/projectclone/actions/workflows/publish.yml/badge.svg)](https://github.com/dhruv13x/projectclone/actions/workflows/publish.yml)
+[![Codecov](https://codecov.io/gh/dhruv13x/projectclone/graph/badge.svg)](https://codecov.io/gh/dhruv13x/projectclone)
+[![Test Coverage](https://img.shields.io/badge/coverage-90%25%2B-brightgreen.svg)](https://github.com/dhruv13x/projectclone/actions/workflows/test.yml)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Ruff](https://img.shields.io/badge/linting-ruff-yellow.svg)](https://github.com/astral-sh/ruff)
+![Security](https://img.shields.io/badge/security-CodeQL-blue.svg)
+
+<!-- Usage -->
+![Downloads](https://img.shields.io/pypi/dm/projectclone.svg)
+![OS](https://img.shields.io/badge/os-Linux%20%7C%20macOS%20%7C%20Windows-blue.svg)
+[![Python Versions](https://img.shields.io/pypi/pyversions/projectclone.svg)](https://pypi.org/project/projectclone/)
+
+<!-- License -->
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+<!-- Docs -->
+[![Docs](https://img.shields.io/badge/docs-latest-brightgreen.svg)](https://your-docs-link)
+
+</div>
+
+
 # projectclone 🧬  
 ### Exact, reproducible, full-state project snapshots — including git, caches, env artifacts & symlinks
-
-[![PyPI](https://img.shields.io/pypi/v/projectclone.svg)](https://pypi.org/project/projectclone/)
-[![Python](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Build](https://img.shields.io/github/actions/workflow/status/dhruv13x/projectclone/publish.yml)](https://github.com/dhruv13x/projectclone/actions)
-[![Downloads](https://img.shields.io/pypi/dm/projectclone.svg)](https://pypi.org/project/projectclone/)
-![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20Android%20(Termux)-orange.svg)
 
 ---
 

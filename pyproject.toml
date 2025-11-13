@@ -81,7 +81,7 @@ testpaths = ["tests"]
 addopts = [
     "-q",                  # Run in quiet mode
     "--strict-markers",    # Be strict about pytest markers
-    "--cov=src/projectclone",  # Measure coverage on the src package
+    "--cov=src/autoheader",  # Measure coverage on the src package
     "--cov-report=term-missing", # Show missing lines in terminal
     "--cov-fail-under=90",   # Fail build if coverage < 85%
 ]

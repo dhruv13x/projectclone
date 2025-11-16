@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# src/projectclone/cli.py
+
 """
 create_backup.py
 
@@ -40,6 +42,7 @@ from .cleanup import cleanup_state
 from .rotation import rotate_backups
 from .scanner import walk_stats
 from .utils import sanitize_token, timestamp, human_size, ensure_dir, make_unique_path
+from .banner import print_logo
 
 
 def parse_args():
@@ -64,6 +67,7 @@ def parse_args():
 
 
 def main():
+    print_logo()
     args = parse_args()
     cwd = Path.cwd()
     raw_foldername = cwd.name or "root"

@@ -1,3 +1,5 @@
+# src/projectclone/cleanup.py
+
 import signal
 import shutil
 import sys

@@ -1,3 +1,5 @@
+# src/projectclone/scanner.py
+
 import fnmatch
 import os
 from pathlib import Path

@@ -113,13 +113,5 @@ The tool works by scanning the project directory, creating a temporary staging d
 
 ---
 
-## 🗺️ Roadmap
-- `.projectcloneignore` file for exclusions
-- Support for `zstd` / `lz4` compression
-- Remote targets (SSH, S3, GDrive)
-- Encrypted archives
-
----
-
 ## 🤝 Contributing & License
 Contributions are welcome! Please open an issue or submit a pull request. This project is licensed under the MIT License.

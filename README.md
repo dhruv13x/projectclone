@@ -4,306 +4,122 @@
 
 <div align="center">
 
-<!-- Package Info -->
 [![PyPI version](https://img.shields.io/pypi/v/projectclone.svg)](https://pypi.org/project/projectclone/)
 [![Python](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/)
-![Wheel](https://img.shields.io/pypi/wheel/projectclone.svg)
-[![Release](https://img.shields.io/badge/release-PyPI-blue)](https://pypi.org/project/projectclone/)
-
-<!-- Build & Quality -->
 [![Build status](https://github.com/dhruv13x/projectclone/actions/workflows/publish.yml/badge.svg)](https://github.com/dhruv13x/projectclone/actions/workflows/publish.yml)
-[![Codecov](https://codecov.io/gh/dhruv13x/projectclone/graph/badge.svg)](https://codecov.io/gh/dhruv13x/projectclone)
-[![Test Coverage](https://img.shields.io/badge/coverage-90%25%2B-brightgreen.svg)](https://github.com/dhruv13x/projectclone/actions/workflows/test.yml)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![Ruff](https://img.shields.io/badge/linting-ruff-yellow.svg)](https://github.com/astral-sh/ruff)
-![Security](https://img.shields.io/badge/security-CodeQL-blue.svg)
-
-<!-- Usage -->
-![Downloads](https://img.shields.io/pypi/dm/projectclone.svg)
-![OS](https://img.shields.io/badge/os-Linux%20%7C%20macOS%20%7C%20Windows-blue.svg)
-[![Python Versions](https://img.shields.io/pypi/pyversions/projectclone.svg)](https://pypi.org/project/projectclone/)
-
-<!-- License -->
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
-<!-- Docs -->
-[![Docs](https://img.shields.io/badge/docs-latest-brightgreen.svg)](https://your-docs-link)
 
 </div>
 
+# 🧬 projectclone
+**Exact, reproducible, full-state project snapshots — including git, caches, env artifacts & symlinks.**
 
-# projectclone 🧬  
-### Exact, reproducible, full-state project snapshots — including git, caches, env artifacts & symlinks
+## About
+`projectclone` creates exact, faithful, self-contained snapshots of your project directory. This enables true reproducibility and safe rollback points across environments and devices. It's for developers who need guaranteed restorable project states.
 
----
-
-## 🚀 Overview
-
-`projectclone` creates **exact, faithful, self-contained snapshots** of your project directory, including:
-
-✔ Source code  
-✔ `.git` repo & history  
-✔ Virtualenvs & caches *(unless excluded)*  
-✔ File timestamps, metadata, symlinks  
-✔ Configs, logs, local DBs  
-✔ Environment-specific state
-
-This enables **true reproducibility** and **safe rollback points** across environments and devices.
-
-### Why this tool?
-
-For developers who need **guaranteed restorable project states**, across:
-
-- Major refactors
-- Release checkpoints
-- Deployment backups
-- Research environments
-- Offline disaster recovery
-- CI/CD artifact capture
-- Termux/mobile development
-- Reproducible experiments
-
-> Think:  
-> `git commit` + `tar` + `rsync --link-dest` + atomic backup discipline  
-> — in one tool.
-
----
-
-## 🔗 Restore tool
-
-For restoring projectclone backups, use its companion tool:
-
-### 👉 [`projectrestore`](https://github.com/dhruv13x/projectrestore)
+### The `projectclone` Ecosystem
+`projectclone` is part of a two-tool ecosystem for safe, reliable backups.
 
 | Tool | Responsibility |
 |---|---|
-`projectclone` | **Create** state snapshots *(non-destructive)*
-`projectrestore` | **Apply** snapshots safely *(atomic & secure)*
+| `projectclone` | **Create** state snapshots *(non-destructive)* |
+| [`projectrestore`](https://github.com/dhruv13x/projectrestore) | **Apply** snapshots safely *(atomic & secure)* |
 
-This design keeps the backup tool safe, focused, and non-destructive — while giving the restore tool full security hardening and atomic restore semantics.
-
----
-
-## ✨ Features
-
-| Feature | Description |
-|---|---|
-Full directory clone | Exact deep copy with metadata  
-Archive mode | `.tar.gz` with optional SHA-256 manifest  
-Incremental mode | Hard-link dedup snapshots (like Time Machine / Borg)  
-Atomic safety | Temp staging → atomic move → rollback on fail  
-Cross-filesystem safe | Intelligent move vs copy fallback  
-Dry-run mode | Preview without modifying anything  
-Rotation | Keep only the last N snapshots  
-Exclude filters | Glob / substring file exclusion  
-Progress UI | Live counters and size reporting  
-Termux ready | Works on Android + proot Ubuntu
+This design keeps the backup tool focused and non-destructive, while the restore tool handles the complexities of atomic and secure restoration.
 
 ---
 
-## 📦 Installation
+## 🚀 Quick Start
 
-### 🐍 Standard install
+### Prerequisites
+- Python 3.8+
+- `rsync` (for incremental backups)
 
-```sh
+### Installation
+```bash
 pip install projectclone
+```
 
-📱 Termux / Android
+### Usage Example
+```bash
+# Create a backup with a note
+projectclone my_first_backup
 
-pkg install rsync proot-distro
-pip install projectclone
-
-
----
-
-🔧 Usage Examples
-
-Basic backup
-
-projectclone backup_1k_tests
-
-Creates:
-
-/sdcard/project_backups/2025-02-03_172501-myproject-backup_1k_tests/
-
-
----
-
-Archive mode
-
+# Create a compressed archive
 projectclone release_v1 --archive
 
-Produces:
-
-release_v1.tar.gz
-release_v1.tar.gz.sha256
-
-
----
-
-Incremental backup (deduplicated snapshots)
-
-projectclone checkpoint --incremental
-
+# Create an incremental backup
+projectclone nightly --incremental
+```
+> **To restore a backup, use the [`projectrestore`](https://github.com/dhruv13x/projectrestore) tool.**
 
 ---
 
-Exclude files
-
-projectclone nightly --exclude __pycache__ --exclude .mypy_cache
-
-
----
-
-Retain last 5 backups
-
-projectclone stable --keep 5
-
+## ✨ Key Features
+- **Full directory clone**: Exact deep copy with metadata.
+- **Archive mode**: Creates a `.tar.gz` with an optional SHA-256 manifest.
+- **Incremental mode**: Hard-link deduplicated snapshots (like Time Machine).
+- **Atomic safety**: Uses a temporary staging directory for safe, atomic operations.
+- **Dry-run mode**: Preview the backup process without modifying anything.
+- **Rotation**: Automatically keeps the last N snapshots.
+- **Exclude filters**: Exclude files and directories using glob patterns.
 
 ---
 
-Dry-run safety preview
+## ⚙️ Configuration & Advanced Usage
 
-projectclone test --dry-run
-
-
----
-
-Full help
-
-projectclone --help
-
-
----
-
-🛠 Options Summary
-
-Flag	Meaning
-
---archive	Create .tar.gz archive
---incremental	Hard-linked incremental mode
---manifest	Size manifest
---manifest-sha	Per-file SHA-256 manifest
---exclude	Exclude patterns
---dest DIR	Custom destination
---dry-run	Preview, no writes
---symlinks	Preserve symlinks
---keep N	Keep only last N backups
---yes	Auto-confirm operations
---verbose	Debug logging
-
-
+### CLI Arguments
+| Flag | Shorthand | Description | Default |
+|---|---|---|---|
+| `--dest` | | Base destination folder | `/sdcard/project_backups` |
+| `--archive` | `-a` | Create a compressed `.tar.gz` archive | `False` |
+| `--manifest` | | Write a `MANIFEST.txt` with file sizes | `False` |
+| `--manifest-sha` | | Compute per-file SHA256 checksums | `False` |
+| `--symlinks` | | Preserve symlinks instead of copying their targets | `False` |
+| `--keep` | | Number of recent backups to keep | `0` (keep all) |
+| `--yes` | | Skip confirmation prompts | `False` |
+| `--progress-interval`| | Print progress every N files | `50` |
+| `--exclude` | | Exclude files/dirs (can be used multiple times) | `[]` |
+| `--dry-run` | | Preview actions without writing to disk | `False` |
+| `--incremental` | | Use `rsync` for incremental backups | `False` |
+| `--verbose` | | Enable verbose logging | `False` |
+| `--version` | | Show the program's version and exit | |
 
 ---
 
-🔐 Safety Guarantees
-
-Atomic staging → atomic final move
-
-Secure cleanup on failure
-
-Cross-device move fallback
-
-Drops setuid/setgid bits
-
-Tight log permissions (chmod 600 where supported)
-
-Non-destructive: never overwrites directories
-
-
+## 🔐 Safety Guarantees
+- **Atomic Operations**: Backups are staged in a temporary directory and moved to their final destination atomically, preventing partial or corrupt backups.
+- **Secure Cleanup**: Temporary files and directories are securely cleaned up on successful completion or failure.
+- **Cross-Device Safety**: The tool intelligently falls back to a safe copy-and-delete operation when moving files across different filesystems.
+- **Permission Handling**: The tool drops `setuid`/`setgid` bits and sets restrictive permissions on log files.
+- **Non-Destructive**: `projectclone` never overwrites existing directories, ensuring your data is safe.
 
 ---
 
-📁 Default Paths
+## 🏗️ Architecture
+```
+src/projectclone/
+├── __init__.py
+├── backup.py       # Core backup logic
+├── banner.py       # ASCII art
+├── cleanup.py      # Temporary file cleanup
+├── cli.py          # Command-line interface
+├── rotation.py     # Backup rotation logic
+├── scanner.py      # File scanning and stats
+└── utils.py        # Utility functions
+```
 
-Platform	Location
-
-Linux	~/project_backups
-Termux	/sdcard/project_backups
-
-
-
----
-
-🧪 Development
-
-pip install -e .[dev]
-pytest -v
-
+The tool works by scanning the project directory, creating a temporary staging directory, and then either copying the files, creating an archive, or running `rsync` for an incremental backup. Once complete, the backup is moved to its final destination atomically.
 
 ---
 
-📜 License
-
-MIT — open source & production-friendly.
-
-
----
-
-🤝 Contributing
-
-Ideas & PRs welcome — especially around:
-
-Compression tuning (zstd / lz4)
-
-Remote sync (SSH / S3 / GDrive)
-
-Fuse mounts / stream extraction
-
-Config file support
-
-
+## 🗺️ Roadmap
+- `.projectcloneignore` file for exclusions
+- Support for `zstd` / `lz4` compression
+- Remote targets (SSH, S3, GDrive)
+- Encrypted archives
 
 ---
 
-⭐ Support
-
-If this tool protects your work, please ⭐️ the repo — your support drives development.
-
-git clone https://github.com/dhruv13x/projectclone
-
-
----
-
-🧠 Author
-
-Dhruv
-Mobile-first DevOps explorer | Rust & Python | Cloud | Termux power-user
-
-
----
-
-🧩 Roadmap
-
-.projectcloneignore
-
-zstd / lz4 compression
-
-Remote targets (SSH / S3 / GDrive)
-
-Encrypted archives
-
-GUI wrapper (Android & Desktop)
-
-
-> Restore is intentionally delegated to
-projectrestore → secure, atomic, rollback-safe recovery
-
-
-
-
----
-
-💬 Final Word
-
-> Code evolves — backups must keep up.
-Restore safely — with tools designed for it.
-
-
-
-With projectclone, every project state becomes portable, reproducible, and future-proof.
-
-Clone. Freeze. Protect. Restore via projectrestore.
-
-
----
+## 🤝 Contributing & License
+Contributions are welcome! Please open an issue or submit a pull request. This project is licensed under the MIT License.

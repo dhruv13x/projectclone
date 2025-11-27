@@ -3,20 +3,17 @@ name: 🚀 Publish to PyPI (Trusted Publishing)
 on:
   push:
     tags:
-      - "projectclone-v*.*.*"
+      - "v*.*.*"  # Trigger only on semantic version tags (e.g., v1.2.3)
 
 permissions:
   contents: read
-  id-token: write
+  id-token: write  # Required for PyPI OIDC Trusted Publishing
 
 jobs:
   build-and-publish:
     name: Build & Publish
     runs-on: ubuntu-latest
-    environment: pypi
-    defaults:
-      run:
-        working-directory: ./projectclone
+    environment: pypi # Assumes a GitHub environment named 'pypi' is configured
 
     steps:
       - name: 🧩 Checkout code
@@ -30,18 +27,27 @@ jobs:
       - name: 📦 Install build, test, and dev tools
         run: |
           python -m pip install --upgrade pip
+          # Install core build tools
           pip install build twine
+          # Install project-specific development dependencies
+          # This assumes 'dev' extra is defined in pyproject.toml and includes
+          # pytest, pytest-cov, ruff, black, mypy, etc.
           pip install .[dev]
+          # Install codecov-action dependency if not already in [dev]
           pip install codecov
 
       - name: 🧪 Run tests & generate coverage
-        run: pytest --cov=projectclone --cov-report=xml
+        # This command assumes pytest is used and the main package code is in 'src'.
+        # If a project's main package is named differently (e.g., 'src/my_tool_name'),
+        # '--cov=src' should still work if the package is directly under 'src'.
+        run: pytest --cov=src --cov-report=xml
 
       - name: 📊 Upload coverage reports to Codecov
+        # Requires a CODECOV_TOKEN secret to be configured in the repository settings.
         uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./projectclone/coverage.xml
+          file: ./coverage.xml
           verbose: true
           fail_ci_if_error: true
 
@@ -54,6 +60,5 @@ jobs:
       - name: 🚀 Publish to PyPI (via OIDC)
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          packages_dir: projectclone/dist
           verbose: true
-          skip-existing: false
+          skip-existing: false  # Fail if version already exists (prevents accidental overwrites)

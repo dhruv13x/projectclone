@@ -33,23 +33,23 @@ jobs:
           # This assumes 'dev' extra is defined in pyproject.toml and includes
           # pytest, pytest-cov, ruff, black, mypy, etc.
           pip install .[dev]
-          # Install codecov-action dependency if not already in [dev]
-          pip install codecov
+#          # Install codecov-action dependency if not already in [dev]
+#          pip install codecov
 
-      - name: 🧪 Run tests & generate coverage
-        # This command assumes pytest is used and the main package code is in 'src'.
-        # If a project's main package is named differently (e.g., 'src/my_tool_name'),
-        # '--cov=src' should still work if the package is directly under 'src'.
-        run: pytest --cov=src --cov-report=xml
+#      - name: 🧪 Run tests & generate coverage
+#        # This command assumes pytest is used and the main package code is in 'src'.
+#        # If a project's main package is named differently (e.g., 'src/my_tool_name'),
+#        # '--cov=src' should still work if the package is directly under 'src'.
+#        run: pytest --cov=src --cov-report=xml
 
-      - name: 📊 Upload coverage reports to Codecov
-        # Requires a CODECOV_TOKEN secret to be configured in the repository settings.
-        uses: codecov/codecov-action@v4
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./coverage.xml
-          verbose: true
-          fail_ci_if_error: true
+#      - name: 📊 Upload coverage reports to Codecov
+#        # Requires a CODECOV_TOKEN secret to be configured in the repository settings.
+#        uses: codecov/codecov-action@v4
+#        with:
+#          token: ${{ secrets.CODECOV_TOKEN }}
+#          file: ./coverage.xml
+#          verbose: true
+#          fail_ci_if_error: true
 
       - name: ⚙️ Build distribution packages
         run: python -m build

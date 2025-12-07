@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "projectclone"
-version = "5.0.0"
+version = "5.0.1"
 description = "Create exact, self-contained, reproducible project snapshots including git, caches, configs, and environment artifacts."
 readme = "README.md"
 requires-python = ">=3.8"
